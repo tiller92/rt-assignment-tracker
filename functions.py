@@ -48,7 +48,10 @@ def createStaffMemberDict(member, member_teams, restriction,extras):
           'Charge':{
           'trained':extras[2],
           'numshifts':member.shifts_in_Charge,
-          },},
+          },
+          'total_shifts':member.total_shifts,
+          }
+      ,
       'Restriction':{
         'restriction':restriction_y,
         'comment':restriction_x,
@@ -129,30 +132,32 @@ def staff_shift_count(arr,core_team):
       try:
         if RT.coreteams[0].p_team_id == unit_id.id:
           RT.shifts_in_p += 1
+          RT.total_shifts += 1
           db.session.commit()
         elif RT.coreteams[0].b_team_id == unit_id.id:
+          RT.total_shifts += 1
           RT.shifts_in_b += 1
           db.session.commit()
         elif core_team == 'NICU' and RT.coreteams[0].NICU == True:
+          RT.total_shifts += 1
           RT.shifts_in_NICU += 1
           RT.shifts_in_tert += 1
           db.session.commit()
         elif core_team == 'ED' and RT.coreteams[0].ED == True:
+          RT.total_shifts += 1
           RT.shifts_in_ED += 1
           RT.shifts_in_tert += 1
           db.session.commit()
         elif core_team == 'Charge' and RT.coreteams[0].Charge == True:
+          RT.total_shifts += 1
           RT.shifts_in_Charge += 1
           RT.shifts_in_tert += 1
           db.session.commit()
         elif core_team == 'FLOORS':
+          RT.total_shifts += 1
           RT.shifts_on_floors += 1
           db.session.commit()
       except:
         print(RT.first_name, RT.id, 'error', core_team, unit_id)
 
 
-
-def sort_staff(obj, sort_by):
-  asc_staff = sorted(obj['RT']['first_name'])
-  print(asc_staff)

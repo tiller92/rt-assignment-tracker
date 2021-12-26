@@ -62,7 +62,11 @@
                     </td>
                     <td>Primary:{{RT['RT']['coreteams']['primary']['numshifts']}}, Secondary:{{RT['RT']['coreteams']['secondary']['numshifts']}}, Tertiary: {{RT['RT']['coreteams']['tert']['numshifts']}}
                     </td>
-                    <td>{{RT['RT']['coreteams']['Floors']['numshifts']}}</td>
+                    <td>{%if RT['RT']['coreteams']['total_shifts'] != 0%}
+                        {{(RT['RT']['coreteams']['Floors']['numshifts'] / RT['RT']['coreteams']['total_shifts'])*100}}%
+                        {% else %}
+                        N/A
+                    {%endif%}</td>
                     <td>
                         <form action="/edit-staff/{{RT['RT']['id']}}" method="GET">
                             <button class="btn btn-small btn-secondary">Edit</button>

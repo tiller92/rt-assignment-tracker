@@ -3,7 +3,7 @@ from flask import Flask
 from flask import render_template, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.datastructures import FileMultiDict
-from functions import createStaffMemberDict, proccess_cell, sort_staff,staff_shift_count
+from functions import createStaffMemberDict, proccess_cell, staff_shift_count
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.utils import secure_filename
 import os
