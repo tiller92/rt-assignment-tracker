@@ -12,10 +12,10 @@ team3 = CoreTeam(name='ED')
 team4 = CoreTeam(name='SICU')
 team5 = CoreTeam(name='NICU')
 team6 = CoreTeam(name='Charge')
-team7 = CoreTeam(name='Ross')
+team7 = CoreTeam(name='ROSS')
 team8 = CoreTeam(name='10ICU')
 team9 = CoreTeam(name='NCCU')
-team10 = CoreTeam(name='Floors')
+team10 = CoreTeam(name='FLOORS')
 
 team = [team1,team2,team3,team4,team5,team6,team7,team8,team9,team10]
 for t in team:
@@ -54,8 +54,9 @@ rt27 = RespStaff(first_name='Pam', last_name='Castle')
 rt28 = RespStaff(first_name='Chhunheng', last_name='Chom', nick_name='Chom')
 rt29 = RespStaff(first_name='Russel', last_name='Katterheinrich')
 rt30 = RespStaff(first_name='Jarrod', last_name='Hume')
+rt31 = RespStaff(first_name='Kellie', last_name='McCunn')
 
-RTs = [rt1,rt2,rt3,rt4,rt5,rt6,rt7,rt8,rt9,rt10,rt11,rt12,rt13,rt14,rt15,rt16,rt17,rt18,rt19,rt20,rt21,rt22,rt23,rt24,rt25,rt26,rt27,rt28,rt29,rt30]
+RTs = [rt1,rt2,rt3,rt4,rt5,rt6,rt7,rt8,rt9,rt10,rt11,rt12,rt13,rt14,rt15,rt16,rt17,rt18,rt19,rt20,rt21,rt22,rt23,rt24,rt25,rt26,rt27,rt28,rt29,rt30,rt31]
 for rt in RTs:
   db.session.add(rt)
 db.session.commit()
@@ -91,11 +92,12 @@ core27 = RTCoreTeam(rt_id=27,p_team_id=9, b_team_id=1, ED=True)
 core28 = RTCoreTeam(rt_id=28,p_team_id=7, b_team_id=4)
 core29 = RTCoreTeam(rt_id=29,p_team_id=2, b_team_id=9, ED=True)
 core30 = RTCoreTeam(rt_id=30,p_team_id=2, b_team_id=1)
+core31 = RTCoreTeam(rt_id=31,p_team_id=1, b_team_id=2)
 
 
 
 
-cores = [core1, core2, core3,core4,core5,core6,core7,core8,core9,core10,core11,core12,core13,core14,core15,core16,core17,core18,core19,core20,core21,core22,core23,core24,core25, core26,core27,core28,core29, core30]
+cores = [core1, core2, core3,core4,core5,core6,core7,core8,core9,core10,core11,core12,core13,core14,core15,core16,core17,core18,core19,core20,core21,core22,core23,core24,core25, core26,core27,core28,core29, core30,core31]
 
 for c in cores:
   db.session.add(c)
@@ -107,4 +109,3 @@ rt_res = Restriction(rt_id=1, comment='tesing')
 
 db.session.add(rt_res)
 db.session.commit()
-

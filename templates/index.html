@@ -35,15 +35,26 @@
             </ul>
         </div>
     </nav>
+    {% if alert%}
+    <div class="container">
+        <div class="alert alert-success" role="alert">
+            Assigment Counted!
+        </div>
+        <form action="/" method="GET">
+            <button id='excelBtn' class="btn btn-md btn-light    m-1">Submit Another File</button>
+        </form>
+    </div>
+    {%endif%} {% if form%}
     <div class="container p-1 m-5">
-        <form method="POST" class="form-control" enctype="multipart/form-data">
+        <form id='excel' method="POST" class="form-control" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <p>
                 {{form.file.label}} {{form.file}}
             </p>
-            <button class="btn btn-md btn-success m-1">Send!</button>
+            <button id='excelBtn' class="btn btn-md btn-success m-1">Send!</button>
         </form>
     </div>
+    {% endif%}
     <!-- scripts and links -->
     <script src="/static/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js " crossorigin="anonymous "></script>

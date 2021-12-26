@@ -33,6 +33,12 @@ class RespStaff(db.Model):
 
   shifts_in_b = db.Column(db.Integer, nullable=True,default=0)
   
+  shifts_in_NICU = db.Column(db.Integer, nullable=True,default=0)
+  
+  shifts_in_ED = db.Column(db.Integer, nullable=True,default=0)
+  
+  shifts_in_Charge = db.Column(db.Integer, nullable=True,default=0)
+  
   shifts_in_tert = db.Column(db.Integer, nullable=True,default=0)
   
   shifts_on_floors = db.Column(db.Integer, nullable=True,default=0)

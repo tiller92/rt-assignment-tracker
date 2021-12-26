@@ -43,9 +43,10 @@
 
                 <tr>
                     <th scope="col">First Name</th>
-                    <th scope="col">Last Last Name</th>
+                    <th scope="col">Last Name</th>
                     <th scope="col">Core Teams</th>
-                    <th scope="col">Shifts%/monthly</th>
+                    <th scope="col">Core Team Shifts</th>
+                    <th scope="col">Floor shifts</th>
 
                 </tr>
             </thead>
@@ -55,10 +56,13 @@
                     <td>{{RT['RT']['first_name']}} {%if RT['RT']['nick_name']%} "{{RT['RT']['nick_name']}}"{%endif%}
                     </td>
                     <td>{{RT['RT']['last_name']}}</td>
-                    <td>{{RT['RT']['coreteams']['primary']['name']}}, {{RT['RT']['coreteams']['secondary']['name']}}{% if RT['RT']['coreteams']['NICU']['trained'] %}, NICU {% endif%} {% if RT['RT']['coreteams']['ED']['trained'] %}, ED {% endif%} {% if RT['RT']['coreteams']['Charge']['trained']
+                    <td> {{RT['RT']['coreteams']['primary']['name']}}, {{RT['RT']['coreteams']['secondary']['name']}} {% if RT['RT']['coreteams']['NICU']['trained'] %}, NICU {% endif%} {% if RT['RT']['coreteams']['ED']['trained'] %}, ED {% endif%} {% if RT['RT']['coreteams']['Charge']['trained']
                         %}, Charge {% endif%}
                     </td>
-                    <td>90%</td>
+                    </td>
+                    <td>Primary:{{RT['RT']['coreteams']['primary']['numshifts']}}, Secondary:{{RT['RT']['coreteams']['secondary']['numshifts']}}, Tertiary: {{RT['RT']['coreteams']['tert']['numshifts']}}
+                    </td>
+                    <td>{{RT['RT']['coreteams']['Floors']['numshifts']}}</td>
                     <td>
                         <form action="/edit-staff/{{RT['RT']['id']}}" method="GET">
                             <button class="btn btn-small btn-secondary">Edit</button>
@@ -67,7 +71,7 @@
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                             <button class="btn btn-small btn-danger mt-1">Remove</button>
                         </form>
-                    </td>
+
                 </tr>
 
                 {% endfor %}

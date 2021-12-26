@@ -3,13 +3,13 @@ from flask import Flask
 from flask import render_template, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.datastructures import FileMultiDict
-from readxl import *
-from functions import createStaffMemberDict
+from functions import createStaffMemberDict, proccess_cell, sort_staff,staff_shift_count
 from flask_wtf.csrf import CSRFProtect
 from werkzeug.utils import secure_filename
 import os
 from models import db,connect_db, RespStaff, Restriction, RTCoreTeam, CoreTeam
 from forms import GetFile, AddRT
+from readxl import excel_break
 
 
 app = Flask(__name__)
@@ -22,32 +22,45 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///rt_assignment'
 #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///flask-heroku')# use secret key in production or default to our dev one
 #app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'shh')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 
 connect_db(app)
 
-
+  # home page where the assigments is submitted
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
   form = GetFile()
   if form.validate_on_submit():
     file = form.file.data
-    print(f'{file}')
-    print('*************************************** file from backend')
     filename = secure_filename(file.filename)
     file.save(os.path.join(
             filename
         ))
-    excel_break(file)
-    return redirect('/')
+    excel_result = excel_break(file)
+    session['cur_assign'] = excel_result
+    return redirect('/file-added')
   else:
     return render_template("index.html", form=form)
   
+  
 
-  #List all page
+  # page that does the DB update but redirects 
+@app.route('/file-added', methods=['POST','GET'])
+def update_db():
+  """do what you need with curr staff session"""
+  alert = True
+  curr_unit = ''
+  for units in session['cur_assign']['units']:
+    curr_unit = units
+    staff_shift_count(session['cur_assign']['units'][curr_unit],curr_unit)
+    # insert the time, date and shift the last file was added if time allows
+  return render_template("index.html", alert=alert )
+
+
+  #List all staff page
 @app.route('/respstaff', methods=['GET','POST'])
 def show_staff():
-  stafflist = RespStaff.query.all()
+  stafflist = RespStaff.query.order_by(RespStaff.first_name.asc()).all()
   all_staff = []
   for person in stafflist:
     team_list = []
@@ -66,7 +79,6 @@ def show_staff():
 @app.route('/add-staff', methods=['GET','POST'])
 def form_two():
   form = AddRT()
-
   if form.validate_on_submit():
     first_name = form.first_name.data
     last_name = form.last_name.data
@@ -77,7 +89,6 @@ def form_two():
     NICU = form.NICU.data
     Charge = form.Charge.data
     rest = form.restrictions.data
-    # list of all core teams that need to be commited
     NICU_bool = False
     ED_bool = False
     Charge_bool = False
@@ -107,7 +118,7 @@ def form_two():
     return render_template("add-staff.html",  form=form)
   
   
-
+  #form that edits staff
 @app.route('/edit-staff/<int:id>', methods=['GET','POST'])
 def edit_staff(id):
   rt = RespStaff.query.get(id)
@@ -177,11 +188,19 @@ def edit_staff(id):
   else:
     return render_template("edit-staff.html",  form=form)
   
+  
+  # page that deletes staff from staff list 
 @app.route('/remove-staff/<int:id>', methods=['POST'])
 def remove_staff(id):
   rt = RespStaff.query.get(id)
-  print(rt.first_name, "            ****************************************************************")
   db.session.delete(rt)
   db.session.commit()
   return redirect('/respstaff')      
+
+
+@app.route('/coreteams',methods=['GET','POST'])
+def show_teams():
   
+  team_dict = []
+  
+  return render_template('teams.html', teamdict=team_dict)
